@@ -1,0 +1,15 @@
+{
+   "manifest_version": 3,
+   "name": "Gestor de Tareas",
+   "version": "1.0",
+   "description": "Guarda y gestiona tareas usando localStorage.",
+   "action": {
+      "default_popup": "popup.html",
+      "default_title": "Tickets de Tareas",
+      "default_icon": {
+         "16": "icon.png",
+         "48": "icon.png",
+         "128": "icon.png"
+      }
+   }
+}

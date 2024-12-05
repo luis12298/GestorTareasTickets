@@ -9,20 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
    // Cargar tareas desde localStorage
    const loadTasks = () => {
       const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-      tasks.forEach(task => addTaskToList(task.title, task.description));
+      tasks.forEach(task => addTaskToList(task.title, task.description, task.completed || false));
    };
 
    // Guardar tareas en localStorage
    const saveTasks = () => {
       const tasks = Array.from(taskList.children).map(item => ({
          title: item.querySelector(".task-title").textContent,
-         description: item.querySelector(".task-description-text").textContent
+         description: item.querySelector(".task-description-text").textContent,
+         completed: item.classList.contains("completed")
       }));
       localStorage.setItem("tasks", JSON.stringify(tasks));
    };
 
    // Crear y añadir un ticket a la lista
-   const addTaskToList = (title, description) => {
+   const addTaskToList = (title, description, completed = false) => {
       const taskItem = document.createElement("li");
       taskItem.classList.add("task-item");
 
@@ -34,10 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
       taskDescription.classList.add("task-description-text");
       taskDescription.textContent = description;
 
+      // Botón de eliminar
       const deleteBtn = document.createElement("button");
       deleteBtn.classList.add("delete-btn");
       deleteBtn.textContent = "X";
-
       deleteBtn.addEventListener("click", () => {
          if (confirm("¿Estás seguro de que deseas eliminar esta tarea?")) {
             taskItem.remove();
@@ -46,25 +47,54 @@ document.addEventListener("DOMContentLoaded", () => {
          }
       });
 
+      // Botón de completar
+      const completeBtn = document.createElement("button");
+      completeBtn.classList.add("complete-btn");
+      completeBtn.textContent = "✔";
+
+      // Configurar el estado inicial del botón y la tarea
+      if (completed) {
+         taskItem.classList.add("completed");
+         taskTitle.style.textDecoration = "line-through";
+         taskDescription.style.textDecoration = "line-through";
+         completeBtn.style.backgroundColor = "#6c757d"; // Gris si ya está completado
+      } else {
+         completeBtn.style.backgroundColor = "#007bff"; // Azul si no está completado
+      }
+
+      completeBtn.addEventListener("click", () => {
+         taskItem.classList.toggle("completed");
+
+         if (taskItem.classList.contains("completed")) {
+            taskTitle.style.textDecoration = "line-through";
+            taskDescription.style.textDecoration = "line-through";
+            completeBtn.style.backgroundColor = "#6c757d"; // Color gris cuando está completado
+         } else {
+            taskTitle.style.textDecoration = "none";
+            taskDescription.style.textDecoration = "none";
+            completeBtn.style.backgroundColor = "#007bff"; // Vuelve al azul cuando no está completado
+         }
+
+         saveTasks();
+      });
+
       taskItem.appendChild(taskTitle);
       taskItem.appendChild(taskDescription);
       taskItem.appendChild(deleteBtn);
-
+      taskItem.appendChild(completeBtn);
       taskList.appendChild(taskItem);
-      adjustTaskListHeight(); // Ajustar el tamaño de la lista
+
+      adjustTaskListHeight();
    };
 
    // Manejar el formulario para añadir tareas
    const handleAddTask = (e) => {
       e.preventDefault();
-
       const title = taskTitleInput.value.trim();
       const description = taskDescriptionInput.value.trim();
-
       if (title) {
          addTaskToList(title, description);
          saveTasks();
-
          // Limpiar campos
          taskTitleInput.value = "";
          taskDescriptionInput.value = "";
@@ -86,14 +116,13 @@ document.addEventListener("DOMContentLoaded", () => {
    // Cargar tareas al inicio
    loadTasks();
 
+   // Filtro de búsqueda
    searchInput.addEventListener("input", () => {
       const filter = searchInput.value.toLowerCase();
       const tasks = taskList.querySelectorAll(".task-item");
-
       tasks.forEach((task) => {
          const title = task.querySelector(".task-title").textContent.toLowerCase();
          const description = task.querySelector(".task-description-text").textContent.toLowerCase();
-
          if (title.includes(filter) || description.includes(filter)) {
             task.style.display = "";
          } else {
@@ -101,6 +130,4 @@ document.addEventListener("DOMContentLoaded", () => {
          }
       });
    });
-
 });
-// Evento para filtrar tareas

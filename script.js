@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-   const taskForm = document.getElementById("taskForm");
+   const completedCheckbox = document.getElementById("completedTasks");
+   const incompletedCheckbox = document.getElementById("incompletedTasks");
+   const deleteAllBtn = document.getElementById("delete");
    const taskTitleInput = document.getElementById("taskTitle");
    const taskDescriptionInput = document.getElementById("taskDescription");
    const addTaskBtn = document.getElementById("addTaskBtn");
@@ -51,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Botón de completar
       const completeBtn = document.createElement("button");
       completeBtn.classList.add("complete-btn");
-      completeBtn.textContent = "✔";
+      completeBtn.textContent = "✎";
 
       // Configurar el estado inicial del botón y la tarea
       if (completed) {
@@ -129,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
    // Cargar tareas al inicio
    loadTasks();
-
    // Filtro de búsqueda
    searchInput.addEventListener("input", () => {
       const filter = searchInput.value.toLowerCase();
@@ -143,5 +144,50 @@ document.addEventListener("DOMContentLoaded", () => {
             task.style.display = "none";
          }
       });
+   });
+
+   const filterTasks = () => {
+      const tasks = taskList.querySelectorAll(".task-item");
+
+      tasks.forEach(task => {
+         const isCompleted = task.classList.contains("completed");
+
+         if (completedCheckbox.checked && incompletedCheckbox.checked) {
+            task.style.display = "";
+         } else if (completedCheckbox.checked && !incompletedCheckbox.checked) {
+            task.style.display = isCompleted ? "" : "none";
+         } else if (!completedCheckbox.checked && incompletedCheckbox.checked) {
+            task.style.display = isCompleted ? "none" : "";
+         } else {
+            task.style.display = "";
+         }
+      });
+   };
+
+   completedCheckbox.addEventListener("change", () => {
+      if (completedCheckbox.checked) {
+         incompletedCheckbox.checked = false; // Desmarcar el otro checkbox
+      }
+      filterTasks();
+   });
+
+   // Evento para el checkbox de tareas incompletas
+   incompletedCheckbox.addEventListener("change", () => {
+      if (incompletedCheckbox.checked) {
+         completedCheckbox.checked = false; // Desmarcar el otro checkbox
+      }
+      filterTasks();
+   });
+
+   // Cargar las tareas y aplicar el filtro al inicio
+   loadTasks();
+   filterTasks();
+   deleteAllBtn.addEventListener("click", () => {
+      const confirmation = confirm("¿Estás seguro de que deseas eliminar todas las tareas?");
+
+      if (confirmation) {
+         taskList.innerHTML = "";  // Eliminar todas las tareas
+         saveTasks();
+      }
    });
 });

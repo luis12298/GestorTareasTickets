@@ -19,7 +19,7 @@
       }
 
       .task-container {
-         width: 350px;
+         width: 450px;
          max-height: 500px;
          background-color: white;
          border-radius: 10px;
@@ -133,6 +133,21 @@
          color: #666;
          word-wrap: break-word;
       }
+
+      .delete-btnAll {
+         background: rgb(248, 0, 0);
+         border: none;
+         border-radius: 50%;
+         width: 25px;
+         height: 25px;
+         font-weight: bold;
+         cursor: pointer;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         color: rgb(255, 255, 255);
+         margin-left: 20%;
+      }
    </style>
 </head>
 
@@ -144,6 +159,15 @@
          <textarea id="taskDescription" class="task-description" placeholder="Descripción de la tarea"></textarea>
          <button id="addTaskBtn" class="task-input">Agregar Tarea</button>
          <input type="search" id="searchInput" class="task-input" placeholder="Buscar tareas...">
+
+         <div id="filterContainer" style="display: flex;">
+            <label for="completedTasks"><input type="checkbox" id="completedTasks"> Tareas completas</label>
+            <label for="incompletedTasks"><input type="checkbox" id="incompletedTasks"> Tareas
+               incompletas
+            </label>
+            <button class="delete-btnAll" id="delete">X</button>
+         </div>
+
       </form>
       <ul id="taskList" class="task-list"></ul>
    </div>

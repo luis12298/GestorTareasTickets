@@ -5,23 +5,37 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Gestor de Tareas</title>
+   <script defer src="script.js"></script>
    <style>
       body {
-         width: 300px;
-         font-family: Arial, sans-serif;
          margin: 0;
-         padding: 10px;
+         font-family: Arial, sans-serif;
          background-color: #f4f4f4;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         height: 100vh;
+         overflow: hidden;
+      }
+
+      .task-container {
+         width: 350px;
+         max-height: 500px;
+         background-color: white;
+         border-radius: 10px;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+         padding: 20px;
+         overflow-y: auto;
       }
 
       h1 {
          text-align: center;
+         margin-bottom: 20px;
       }
 
       .task-form {
          display: flex;
          flex-direction: column;
-         margin-bottom: 10px;
          gap: 10px;
       }
 
@@ -35,11 +49,16 @@
          font-size: 14px;
       }
 
+      textarea {
+         resize: vertical;
+      }
+
       #addTaskBtn {
          background-color: #4CAF50;
          color: white;
          cursor: pointer;
          border: none;
+         transition: background-color 0.3s;
       }
 
       #addTaskBtn:hover {
@@ -49,7 +68,7 @@
       .task-list {
          list-style-type: none;
          padding: 0;
-         margin: 0;
+         margin-top: 20px;
       }
 
       .task-item {
@@ -67,12 +86,10 @@
          transform: scale(1.03);
       }
 
-      .delete-btn {
+      .delete-btn,
+      .complete-btn {
          position: absolute;
          top: 10px;
-         right: 10px;
-         background-color: #ff4d4d;
-         color: white;
          border: none;
          border-radius: 50%;
          width: 30px;
@@ -82,10 +99,25 @@
          display: flex;
          justify-content: center;
          align-items: center;
+         color: white;
+      }
+
+      .delete-btn {
+         right: 10px;
+         background-color: #ff4d4d;
       }
 
       .delete-btn:hover {
          background-color: #e60000;
+      }
+
+      .complete-btn {
+         right: 50px;
+         background-color: #007bff;
+      }
+
+      .complete-btn:hover {
+         background-color: #0056b3;
       }
 
       .task-title {
@@ -105,18 +137,17 @@
 </head>
 
 <body>
-   <h1>Gestor de Tareas</h1>
-   <form id="taskForm" class="task-form">
-      <input type="text" id="taskTitle" class="task-input" placeholder="Título de la tarea" required>
-      <textarea id="taskDescription" class="task-description" placeholder="Descripción de la tarea"></textarea>
-      <button id="addTaskBtn" class="task-input">Agregar Tarea</button>
-      <input type="search" id="searchInput" class="task-input" placeholder="Buscar tareas...">
+   <div class="task-container">
+      <h1>Gestor de Tareas</h1>
+      <form id="taskForm" class="task-form">
+         <input type="text" id="taskTitle" class="task-input" placeholder="Título de la tarea" required>
+         <textarea id="taskDescription" class="task-description" placeholder="Descripción de la tarea"></textarea>
+         <button id="addTaskBtn" class="task-input">Agregar Tarea</button>
+         <input type="search" id="searchInput" class="task-input" placeholder="Buscar tareas...">
+      </form>
+      <ul id="taskList" class="task-list"></ul>
+   </div>
 
-   </form>
-
-
-   <ul id="taskList" class="task-list"></ul>
-   <script src="script.js"></script>
 </body>
 
 </html>
